@@ -40,10 +40,16 @@ class ApiController extends Controller
                 'mobile',
                 'password'
             ])->first();
-            $task['content']['start_address'] = $task['content']['city']['city'] . ' - ' . $task['content']['start_address'];
-            $task['content']['end_address'] = $task['content']['city']['city'] . ' - ' . $task['content']['end_address'];
-            $task['content']['s_address'] = explode('-',$task['content']['start_address'])[0];
-            $task['content']['e_address'] = explode('-',$task['content']['end_address'])[0];
+
+            $task['content']['start_address'] = explode('-',$task['content']['start_address'])[0];
+            $task['content']['end_address'] = explode('-',$task['content']['end_address'])[0];
+
+//            $task['content']['start_address'] = $task['content']['city']['city'] . ' - ' . $task['content']['s_address'];
+//            $task['content']['end_address'] = $task['content']['city']['city'] . ' - ' .$task['content']['e_address'];
+
+//            $task['content']['start_address'] = $task['content']['city']['city'] . ' - ' . $task['content']['s_address'];
+//            $task['content']['end_address'] = $task['content']['city']['city'] . ' - ' .$task['content']['e_address'];
+
             return [
                 'status' => 'success',
                 'msg' => '获取成功',

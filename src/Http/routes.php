@@ -18,3 +18,5 @@ Route::get('/puppet/get-huolala-account',[Controllers\PuppetHuolalaAccountContro
 Route::resource('puppet_equipment', \Uupt\Puppet\Http\Controllers\PuppetEquipmentController::class);
 // 任务管理
 Route::resource('puppet_task', \Uupt\Puppet\Http\Controllers\PuppetTaskController::class);
+// 货拉拉账号
+Route::resource('puppet_huolala_account', \Uupt\Puppet\Http\Controllers\PuppetHuolalaAccountController::class);

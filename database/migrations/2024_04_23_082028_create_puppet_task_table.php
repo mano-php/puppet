@@ -21,8 +21,8 @@ return new class extends Migration
             $table->integer('status')->default(1)->index()->comment('任务状态');
             $table->integer('equipment_id')->nullable()->index()->comment('设备');
             $table->integer('type')->index()->comment('任务类型');
-            $table->text('content')->nullable()->comment('内容');
-            $table->text('result')->nullable()->comment('结果');
+            $table->json('content')->nullable()->comment('内容');
+            $table->json('result')->nullable()->comment('结果');
             $table->timestamps();
             $table->softDeletes();
         });

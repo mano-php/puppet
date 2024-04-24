@@ -11,7 +11,7 @@ class PuppetServiceProvider extends ServiceProvider
 {
     protected $menu = [
         [
-            'parent' => '',
+            'parent' => 0,
             'title' => '傀儡机管理',
             'url' => '/puppet-nav',
             'url_type' => '1',
