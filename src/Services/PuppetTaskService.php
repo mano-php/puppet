@@ -34,6 +34,7 @@ class PuppetTaskService extends AdminService
         foreach ($items as $key => $item) {
             $items[$key]['status_name'] = array_column(admin_dict()->getOptions('puppet.task.status'), 'label', 'value')[$item['status']];
             $items[$key]['content'] = json_decode($item['content'], true);
+            $items[$key]['result'] = json_decode($item['result'], true);
             if(isset($item['equipment_id']) && $item['equipment_id']>=1){
                 $items[$key]['equipment_name'] = PuppetEquipment::query()->where(['id'=>$item['equipment_id']])->value('name');
             }else{

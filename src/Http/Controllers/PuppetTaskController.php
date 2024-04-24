@@ -19,7 +19,13 @@ class PuppetTaskController extends AdminController
     public function list(): Page
     {
         $crud = $this->baseCRUD()
-            ->filterTogglable(false)
+            ->filterTogglable(true)
+            ->filter($this->baseFilter()->body([
+                amis()->GroupControl()->body([
+                    amis()->SelectControl('type', '任务类型')->options(admin_dict()->getOptions('puppet.task.type')),
+                    amis()->SelectControl('status', '任务类型')->options(admin_dict()->getOptions('puppet.task.status')),
+                ]),
+            ]))
 			->headerToolbar([
 				$this->createButton(true),
 				...$this->baseHeaderToolBar()
@@ -96,8 +102,8 @@ class PuppetTaskController extends AdminController
             amis()->Container()->hiddenOn('${type != 1 || (status != 3 && status != 4)}')->body([
                 amis()->Divider()->title('货拉拉采集结果'),
                 // 结果价格
-                amis()->NumberControl('result.price','结果价格')->permission(2)->static(),
-                amis()->NumberControl('result.distance','距离（Km）')->permission(2)->static(),
+                amis()->TextControl('result.price','结果价格')->permission(2)->static(),
+                amis()->TextControl('result.distance','距离（Km）')->permission(2)->static(),
                 amis()->TextControl('result.time','采集时间')->static(),
                 amis()->TextControl('result.msg','采集反馈')->static()
             ])
