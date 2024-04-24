@@ -93,7 +93,7 @@ class PuppetTaskController extends AdminController
             amis()->Container()->hiddenOn('${type != 1}')->body([
                 amis()->Divider()->title('货拉拉采集任务'),
                 amis()->SelectControl('content.account','账号')->source('/puppet/get-huolala-account')->static(),
-                amis()->InputCityControl('content.city', '城市')->extractValue(false)->allowDistrict(false)->static(),
+                amis()->TextControl('content.city.city', '城市')->extractValue(false)->allowDistrict(false)->static(),
                 amis()->SelectControl('content.car_type', '车型')->options(admin_dict()->getOptions('puppet.task.huolala.car_type'))->static(),
                 amis()->TextControl('content.start_address','装货地')->static(),
                 amis()->TextControl('content.end_address','卸货地')->static(),
@@ -103,9 +103,9 @@ class PuppetTaskController extends AdminController
                 amis()->Divider()->title('货拉拉采集结果'),
                 // 结果价格
                 amis()->TextControl('result.price','结果价格')->permission(2)->static(),
-                amis()->TextControl('result.distance','距离（Km）')->permission(2)->static(),
+                amis()->TextControl('content.map_distance','距离（Km）')->permission(2)->static(),
                 amis()->TextControl('result.time','采集时间')->static(),
-                amis()->TextControl('result.msg','采集反馈')->static()
+                amis()->TextControl('result.error_msg','采集反馈')->static()
             ])
         ]);
     }

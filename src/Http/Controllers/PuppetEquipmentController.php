@@ -68,7 +68,7 @@ class PuppetEquipmentController extends AdminController
     public function form($isEdit = false): Form
     {
         return $this->baseForm()->body([
-            amis()->HiddenControl('id','ID')->required(),
+            amis()->HiddenControl('id','ID'),
             amis()->TextControl('name', '名称'),
 			amis()->TextareaControl('desc', '描述'),
         ]);

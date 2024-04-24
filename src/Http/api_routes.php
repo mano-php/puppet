@@ -15,7 +15,7 @@ Route::get('/puppet/push-task',[Controllers\ApiController::class,'pushResult']);
 Route::get('/puppet/probe',[Controllers\ApiController::class,'probe']);
 
 // 添加任务
-Route::get('/puppet/add-task',[Controllers\ApiController::class,'addTask']);
+Route::post('/puppet/add-task',[Controllers\ApiController::class,'addTask']);
 
 // 查询任务
 Route::get('/puppet/query-task',[Controllers\ApiController::class,'queryTask']);

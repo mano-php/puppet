@@ -105,23 +105,33 @@ class ApiController extends Controller
 
     public function addTask(Request $request)
     {
-        $puppetTask = new PuppetTask();
-        $puppetTask->setAttribute('status', 1);
-        $puppetTask->setAttribute('task_id', Str::random(64));
-        $puppetTask->setAttribute('type', 1);
-        $puppetTask->setAttribute('content', json_encode([
-            'account' => 1,
-            'city' => [
-                'city' => $request->input('city'),
-            ],
-            'map_distance' => $request->input('map_distance'), // 地图导航距离
-            'car_type' => $request->input('car_type'),
-            'start_address' => $request->input('city') . $request->input('start_address'),
-            'end_address' => $request->input('city') . $request->input('end_address'),
-        ]));
-        $puppetTask->save();
+
+        $task_lists = $request->post('task_lists',[]);
+
+        $task_id_lists = [];
+        $equipment_id = PuppetEquipment::query()->where(['status'=>1])->skip(rand(0,PuppetEquipment::query()->where(['status'=>1])->count()))->value('id');
+
+        foreach ($task_lists as $item){
+            $puppetTask = new PuppetTask();
+            $puppetTask->setAttribute('status', 1);
+            $puppetTask->setAttribute('task_id', Str::random(64));
+            $puppetTask->setAttribute('equipment_id', $equipment_id);
+            $puppetTask->setAttribute('type', 1);
+            $puppetTask->setAttribute('content', json_encode([
+                'account' => 1,
+                'city' => [
+                    'city' => $item['city'],
+                ],
+                'map_distance' => $item['map_distance'], // 地图导航距离
+                'car_type' => $item['car_type'],
+                'start_address' => $item['city']. $item['start_address'],
+                'end_address' => $item['city'] . $item['end_address'],
+            ]));
+            $puppetTask->save();
+            $task_id_lists[$item['uuid']] = $puppetTask->getAttribute('task_id');
+        }
         return ['status' => 'success', 'msg' => '新增成功', 'data' => [
-            'task_id' => $puppetTask->getAttribute('task_id')
+            'task_id_lists' =>$task_id_lists
         ]];
     }
 
