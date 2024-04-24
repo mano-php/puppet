@@ -9,7 +9,6 @@ use Illuminate\Support\Str;
 use Uupt\Puppet\Models\PuppetEquipment;
 use Uupt\Puppet\Models\PuppetHuolalaAccount;
 use Uupt\Puppet\Models\PuppetTask;
-use function Hyperf\Support\env;
 
 /**
  *
@@ -41,8 +40,10 @@ class ApiController extends Controller
                 'mobile',
                 'password'
             ])->first();
-            $task['content']['start_address'] = $task['content']['city']['city'] . $task['content']['start_address'];
-            $task['content']['end_address'] = $task['content']['city']['city'] . $task['content']['end_address'];
+            $task['content']['start_address'] = $task['content']['city']['city'] . ' - ' . $task['content']['start_address'];
+            $task['content']['end_address'] = $task['content']['city']['city'] . ' - ' . $task['content']['end_address'];
+            $task['content']['s_address'] = explode('-',$task['content']['start_address'])[0];
+            $task['content']['e_address'] = explode('-',$task['content']['end_address'])[0];
             return [
                 'status' => 'success',
                 'msg' => '获取成功',
@@ -107,12 +108,12 @@ class ApiController extends Controller
     public function addTask(Request $request)
     {
 
-        $task_lists = $request->post('task_lists',[]);
+        $task_lists = $request->post('task_lists', []);
 
         $task_id_lists = [];
-        $equipment_id = PuppetEquipment::query()->where(['status'=>1])->skip(rand(0,PuppetEquipment::query()->where(['status'=>1])->count()-1))->value('id');
+        $equipment_id = PuppetEquipment::query()->where(['status' => 1])->skip(rand(0, PuppetEquipment::query()->where(['status' => 1])->count() - 1))->value('id');
 
-        foreach ($task_lists as $item){
+        foreach ($task_lists as $item) {
             $puppetTask = new PuppetTask();
             $puppetTask->setAttribute('status', 1);
             $puppetTask->setAttribute('task_id', Str::random(64));
@@ -125,14 +126,14 @@ class ApiController extends Controller
                 ],
                 'map_distance' => $item['map_distance'], // 地图导航距离
                 'car_type' => $item['car_type'],
-                'start_address' => $item['city']. $item['start_address'],
+                'start_address' => $item['city'] . $item['start_address'],
                 'end_address' => $item['city'] . $item['end_address'],
             ]));
             $puppetTask->save();
             $task_id_lists[$item['uuid']] = $puppetTask->getAttribute('task_id');
         }
         return ['status' => 'success', 'msg' => '新增成功', 'data' => [
-            'task_id_lists' =>$task_id_lists
+            'task_id_lists' => $task_id_lists
         ]];
     }
 
@@ -164,15 +165,15 @@ class ApiController extends Controller
         $task_lists = $request->query('task_lists');
         foreach ($task_lists as $key => $item) {
             $taskInfo = PuppetTask::query()->where(['task_id' => $item['task_id']])->first();
-            if($taskInfo->getAttribute('status') === 4){
-                $result = json_decode($taskInfo->getAttribute('result'),true);
+            if ($taskInfo->getAttribute('status') === 4) {
+                $result = json_decode($taskInfo->getAttribute('result'), true);
                 // 错误消息获取
-                $task_lists[$key]['error_msg'] = isset($result['error_msg'])?strval($result['error_msg']):'-';
+                $task_lists[$key]['error_msg'] = isset($result['error_msg']) ? strval($result['error_msg']) : '-';
             }
-            if($taskInfo->getAttribute('status') === 3){
-                $result = json_decode($taskInfo->getAttribute('result'),true);
-                $task_lists[$key]['price'] = isset($result['price'])?$result['price']:'';
-                $task_lists[$key]['discount_price'] = isset($result['discount_price'])?$result['discount_price']:'';
+            if ($taskInfo->getAttribute('status') === 3) {
+                $result = json_decode($taskInfo->getAttribute('result'), true);
+                $task_lists[$key]['price'] = isset($result['price']) ? $result['price'] : '';
+                $task_lists[$key]['discount_price'] = isset($result['discount_price']) ? $result['discount_price'] : '';
             }
             $task_lists[$key]['status'] = array_column(admin_dict()->getOptions('puppet.task.status'), 'label', 'value')[$taskInfo->getAttribute('status')];
         }
