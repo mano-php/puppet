@@ -30,7 +30,8 @@ class ApiController extends Controller
         PuppetEquipment::query()->where(['uuid' => $uuid])->update(['status' => 1]);
         // 获取采集任务
         if ($task = PuppetTask::query()->where(function ($query) use ($puppetEquipment) {
-            $query->where(['equipment_id' => $puppetEquipment->getAttribute('id')])->orWhereNull('equipment_id');
+            $query->where(['equipment_id' => $puppetEquipment->getAttribute('id')]);
+//            ->orWhereNull('equipment_id');
         })->where('status', 1)->first()) {
             // 更新状态为 处理中
             PuppetTask::query()->where(['id' => $task->getAttribute('id')])->update(['status' => 2, 'equipment_id' => $puppetEquipment->getAttribute('id')]);
@@ -109,7 +110,7 @@ class ApiController extends Controller
         $task_lists = $request->post('task_lists',[]);
 
         $task_id_lists = [];
-        $equipment_id = PuppetEquipment::query()->where(['status'=>1])->skip(rand(0,PuppetEquipment::query()->where(['status'=>1])->count()))->value('id');
+        $equipment_id = PuppetEquipment::query()->where(['status'=>1])->skip(rand(0,PuppetEquipment::query()->where(['status'=>1])->count()-1))->value('id');
 
         foreach ($task_lists as $item){
             $puppetTask = new PuppetTask();
