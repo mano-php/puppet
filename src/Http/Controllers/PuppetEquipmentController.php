@@ -26,6 +26,7 @@ class PuppetEquipmentController extends AdminController
     {
         $crud = $this->baseCRUD()
             ->filterTogglable(false)
+            ->bulkActions([$this->bulkDeleteButton(),$this->bulkRebootButton()])
 			->headerToolbar([
 //				$this->createButton(true),
 				...$this->baseHeaderToolBar()
@@ -36,6 +37,7 @@ class PuppetEquipmentController extends AdminController
 				amis()->TableColumn('desc', '描述'),
                 amis()->TagControl('status_name','状态')->color('${status==1?"success":(status==3?"active":"error")}')->displayMode('status')->type('tag')->static(),
                 amis()->TableColumn('uuid', '设备ID')->sortable(),
+                amis()->TableColumn('reboot_name', '重启')->sortable(),
 				amis()->TableColumn('created_at', __('admin.created_at'))->set('type', 'datetime')->sortable(),
 				amis()->TableColumn('updated_at', __('admin.updated_at'))->set('type', 'datetime')->sortable(),
                 $this->rowActions(true)
@@ -43,6 +45,46 @@ class PuppetEquipmentController extends AdminController
 
         return $this->baseList($crud);
     }
+
+    /**
+     * 批量重启功能
+     * @param $ids
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Resources\Json\JsonResource
+     */
+    public function reboot($ids): \Illuminate\Http\JsonResponse|\Illuminate\Http\Resources\Json\JsonResource
+    {
+        if(!(is_string($ids) && strlen($ids) >=1 && count(explode(',',$ids))>=1)){
+            return $this->response()->fail('请选择要重启的数据');
+        }
+        PuppetEquipment::query()->whereIn('id',explode(',',$ids))->update(['reboot'=>1]);
+        return $this->response()->successMessage('重启成功');
+    }
+
+    /**
+     * 批量重启接口
+     *
+     * @return string
+     */
+    public function getBulkRebootPath()
+    {
+        return 'post:' . admin_url('/puppet/equipment/reboot' . '/${ids}');
+    }
+
+    /**
+     * 批量重启
+     *
+     * @return \Slowlyo\OwlAdmin\Renderers\AjaxAction
+     */
+    protected function bulkRebootButton()
+    {
+        return amis()->AjaxAction()
+            ->api($this->getBulkRebootPath())
+//            ->icon('fa-solid fa-trash-can')
+//            ->icon('fa-solid fa-trash-can')
+            ->label('重启')
+            ->confirmText('您确定要重启选择的设备吗');
+    }
+
 
     /**
      * 操作列

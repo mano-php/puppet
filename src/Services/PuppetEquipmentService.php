@@ -29,6 +29,7 @@ class PuppetEquipmentService extends AdminService
         $total = $list->total();
         foreach ($items as $key=>$item){
             $items[$key]['status_name'] = array_column(admin_dict()->getOptions('puppet.equipment.status'),'label','value')[$item['status']];
+            $items[$key]['reboot_name'] = $item['reboot'] == 1?'等待重启':'正常';
         }
 
         return compact('items', 'total');

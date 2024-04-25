@@ -13,6 +13,10 @@ Route::get('/puppet/get-goods-sku',[Controllers\PuppetEquipmentController::class
  * 搜索账号
  */
 Route::get('/puppet/get-huolala-account',[Controllers\PuppetHuolalaAccountController::class,'getAccount']);
+/**
+ * 批量重启
+ */
+Route::post('/puppet/equipment/reboot/{ids}',[Controllers\PuppetEquipmentController::class,'reboot']);
 
 // 设备管理
 Route::resource('puppet_equipment', \Uupt\Puppet\Http\Controllers\PuppetEquipmentController::class);

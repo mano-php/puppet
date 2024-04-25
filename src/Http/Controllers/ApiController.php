@@ -20,6 +20,7 @@ class ApiController extends Controller
      * @var string
      */
     protected string $map_key = 'PABBZ-6JVYB-AXPUP-NSY7I-SGITE-WQFAY';
+
     public function getTask(Request $request): array
     {
         $uuid = strval($request->input('uuid'));
@@ -28,6 +29,7 @@ class ApiController extends Controller
             $puppetEquipment->setAttribute('name', $uuid);
             $puppetEquipment->setAttribute('desc', $uuid);
             $puppetEquipment->setAttribute('uuid', $uuid);
+            $puppetEquipment->setAttribute('reboot', 0);
             $puppetEquipment->setAttribute('status', 1);
             $puppetEquipment->setAttribute('created_at', date('Y-m-d H:i:s'));
             $puppetEquipment->setAttribute('updated_at', date('Y-m-d H:i:s'));
@@ -124,13 +126,13 @@ class ApiController extends Controller
         }
         $content = json_decode($taskInfo->getAttribute('content'), true);
         if ($status === 'success') {
-            try{
-                $map_response = json_decode(file_get_contents("https://apis.map.qq.com/ws/direction/v1/driving/?from={$this->keywordToLocation($result['start_address'],$content['city']['city'])}&to={$this->keywordToLocation($result['end_address'],$content['city']['city'])}&output=json&key={$this->map_key}"),true);
+            try {
+                $map_response = json_decode(file_get_contents("https://apis.map.qq.com/ws/direction/v1/driving/?from={$this->keywordToLocation($result['start_address'],$content['city']['city'])}&to={$this->keywordToLocation($result['end_address'],$content['city']['city'])}&output=json&key={$this->map_key}"), true);
                 if (!(isset($map_response['result']['routes']) && is_array($map_response['result']['routes']) && count($map_response['result']['routes']) >= 1)) {
                     throw new \Exception("导航距离获取失败form={$this->keywordToLocation($result['start_address'],$content['city']['city'])}&to={$this->keywordToLocation($result['end_address'],$content['city']['city'])}");
                 }
                 $result['map_distance'] = sprintf('%.2f', $map_response['result']['routes'][0]['distance'] / 1000);
-            }catch (\Throwable $throwable){
+            } catch (\Throwable $throwable) {
                 $result['map_error_msg'] = $throwable->getMessage();
             }
         }
@@ -207,6 +209,11 @@ class ApiController extends Controller
         ];
     }
 
+    /**
+     * 查询任务
+     * @param Request $request
+     * @return array
+     */
     public function queryTask(Request $request)
     {
         $task_lists = $request->query('task_lists');
@@ -229,6 +236,44 @@ class ApiController extends Controller
             'msg' => '查询成功',
             'data' => [
                 'task_lists' => $task_lists
+            ]
+        ];
+    }
+
+    /**
+     * 获取重启状态
+     * @param Request $request
+     * @return array|string[]
+     */
+    public function getReboot(Request $request): array
+    {
+        $uuid = strval($request->input('uuid'));
+        if (strlen($uuid) <= 0) {
+            return [
+                'status' => 'error',
+                'msg' => '设备标识不能为空'
+            ];
+        }
+        if (!($puppetEquipment = PuppetEquipment::query()->where(['uuid' => $uuid])->where('status', '<>', 3)->first())) {
+            $puppetEquipment = new PuppetEquipment();
+            $puppetEquipment->setAttribute('name', $uuid);
+            $puppetEquipment->setAttribute('desc', $uuid);
+            $puppetEquipment->setAttribute('uuid', $uuid);
+            $puppetEquipment->setAttribute('reboot', 0);
+            $puppetEquipment->setAttribute('status', 1);
+            $puppetEquipment->setAttribute('created_at', date('Y-m-d H:i:s'));
+            $puppetEquipment->setAttribute('updated_at', date('Y-m-d H:i:s'));
+            $puppetEquipment->save();
+        }
+        if ($puppetEquipment->getAttribute('reboot') == 1) {
+            $puppetEquipment->setAttribute('reboot', 0);
+            $puppetEquipment->save();
+        }
+        return [
+            'status' => 'success',
+            'msg' => '查询成功',
+            'data' => [
+                'reboot' => $puppetEquipment->getAttribute('reboot')
             ]
         ];
     }

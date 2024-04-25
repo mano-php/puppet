@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('name',50)->index()->comment('名称');
             $table->string('desc')->nullable()->default('')->comment('描述');
             $table->string('uuid',50)->index()->comment('设备ID');
+            $table->integer('reboot')->default(0)->index()->comment('是否需要重启');
             $table->integer('status')->nullable()->default(2)->comment('状态'); // 默认离线
             $table->dateTime('last_time')->nullable()->index()->comment('最后交互时间');
             $table->timestamps();
