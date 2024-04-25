@@ -33,20 +33,4 @@ class PuppetEquipmentService extends AdminService
 
         return compact('items', 'total');
     }
-    /**
-     * saving 钩子 (执行于新增/修改前)
-     *
-     * 可以通过判断 $primaryKey 是否存在来判断是新增还是修改
-     *
-     * @param $data
-     * @param $primaryKey
-     *
-     * @return void
-     */
-    public function saving(&$data, $primaryKey = '')
-    {
-        if (!(isset($data['uuid']) && strlen($data['uuid']) >= 1)) {
-            $data['uuid'] = Str::uuid();
-        }
-    }
 }

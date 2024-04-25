@@ -27,7 +27,7 @@ class PuppetEquipmentController extends AdminController
         $crud = $this->baseCRUD()
             ->filterTogglable(false)
 			->headerToolbar([
-				$this->createButton(true),
+//				$this->createButton(true),
 				...$this->baseHeaderToolBar()
 			])
             ->columns([
