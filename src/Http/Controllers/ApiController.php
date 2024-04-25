@@ -19,14 +19,28 @@ class ApiController extends Controller
     {
         $uuid = strval($request->input('uuid'));
         if (!($puppetEquipment = PuppetEquipment::query()->where(['uuid' => $uuid])->where('status', '<>', 3)->first())) {
-            return [
-                'status' => 'error',
-                'msg' => '设备不存在',
-                'data' => []
-            ];
+            $puppetEquipment = new PuppetEquipment();
+            $puppetEquipment->setAttribute('name', $uuid);
+            $puppetEquipment->setAttribute('desc', $uuid);
+            $puppetEquipment->setAttribute('uuid', $uuid);
+            $puppetEquipment->setAttribute('status', 1);
+            $puppetEquipment->setAttribute('created_at', date('Y-m-d H:i:s'));
+            $puppetEquipment->setAttribute('updated_at', date('Y-m-d H:i:s'));
+//            return [
+//                'status' => 'error',
+//                'msg' => '设备不存在',
+//                'data' => []
+//            ];
         }
-        // 更新状态
-        PuppetEquipment::query()->where(['uuid' => $uuid])->update(['status' => 1]);
+        // 循环设备 （模拟下线） 超过两分钟
+        foreach (PuppetEquipment::query()->where(['status' => 1])->get() as $equipment) {
+            // 两分钟不消费 则视为掉线
+            if (strtotime($equipment->last_time) < (time() - 120)) {
+                PuppetEquipment::query()->where(['id' => $equipment->id])->update(['status' => 2]);
+            }
+        }
+        // 更新状态 最后心跳时间
+        PuppetEquipment::query()->where(['uuid' => $uuid])->update(['status' => 1, 'last_time' => date('Y-m-d H:i:s')]);
         // 获取采集任务
         if ($task = PuppetTask::query()->where(function ($query) use ($puppetEquipment) {
             $query->where(['equipment_id' => $puppetEquipment->getAttribute('id')]);
@@ -41,8 +55,8 @@ class ApiController extends Controller
                 'password'
             ])->first();
 
-            $task['content']['start_address'] = explode('-',$task['content']['start_address'])[0];
-            $task['content']['end_address'] = explode('-',$task['content']['end_address'])[0];
+            $task['content']['start_address'] = explode('-', $task['content']['start_address'])[0];
+            $task['content']['end_address'] = explode('-', $task['content']['end_address'])[0];
 
 //            $task['content']['start_address'] = $task['content']['city']['city'] . ' - ' . $task['content']['s_address'];
 //            $task['content']['end_address'] = $task['content']['city']['city'] . ' - ' .$task['content']['e_address'];
