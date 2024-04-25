@@ -215,7 +215,7 @@ class ApiController extends Controller
             if ($taskInfo->getAttribute('status') === 4) {
                 $result = json_decode($taskInfo->getAttribute('result'), true);
                 // 错误消息获取
-                $task_lists[$key]['error_msg'] = isset($result['error_msg']) ? strval($result['error_msg']) : '-';
+                $task_lists[$key]['error_msg'] = isset($result['error_msg']) ? strval($result['error_msg']) : '';
             }
             if ($taskInfo->getAttribute('status') === 3) {
                 $result = json_decode($taskInfo->getAttribute('result'), true);
