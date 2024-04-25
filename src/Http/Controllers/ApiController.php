@@ -15,6 +15,11 @@ use Uupt\Puppet\Models\PuppetTask;
  */
 class ApiController extends Controller
 {
+    /**
+     * 腾讯地图KEY
+     * @var string
+     */
+    protected string $map_key = 'PABBZ-6JVYB-AXPUP-NSY7I-SGITE-WQFAY';
     public function getTask(Request $request): array
     {
         $uuid = strval($request->input('uuid'));
@@ -45,7 +50,7 @@ class ApiController extends Controller
         // 获取采集任务
         if ($task = PuppetTask::query()->where(function ($query) use ($puppetEquipment) {
             $query->where(['equipment_id' => $puppetEquipment->getAttribute('id')])
-            ->orWhereNull('equipment_id');
+                ->orWhereNull('equipment_id');
         })->where('status', 1)->first()) {
             // 更新状态为 处理中
             PuppetTask::query()->where(['id' => $task->getAttribute('id')])->update(['status' => 2, 'equipment_id' => $puppetEquipment->getAttribute('id')]);
@@ -117,6 +122,18 @@ class ApiController extends Controller
                 'data' => []
             ];
         }
+        $content = json_decode($taskInfo->getAttribute('content'), true);
+        if ($status === 'status') {
+            try{
+                $map_response = json_decode(file_get_contents("https://apis.map.qq.com/ws/direction/v1/driving/?from={$this->keywordToLocation($result['start_address'],$content['city']['city'])}&to={$this->keywordToLocation($result['end_address'],$content['city']['city'])}&output=json&key={$this->map_key}"));
+                if (!(isset($map_response['result']['routes']) && is_array($map_response['result']['routes']) && count($map_response['result']['routes']) >= 1)) {
+                    throw new \Exception('导航距离获取失败');
+                }
+                $result['map_distance'] = sprintf('%.2f', $map_response['result']['routes'][0]['distance'] / 1000);
+            }catch (\Throwable $throwable){
+                $result['map_error_msg'] = $throwable->getMessage();
+            }
+        }
         $taskInfo->setAttribute('result', json_encode($result));
         $taskInfo->setAttribute('status', $status == 'success' ? 3 : 4);
         $taskInfo->save();
@@ -124,6 +141,15 @@ class ApiController extends Controller
             'status' => 'success',
             'msg' => '反馈成功'
         ];
+    }
+
+    protected function keywordToLocation(string $keyWord, string $city): string
+    {
+        $response = json_decode(file_get_contents("https://apis.map.qq.com/ws/place/v1/suggestion?key={$this->map_key}&region_fix=1&keyword={$keyWord}&region={$city}"), true);
+        if (isset($response['data']) && is_array($response['data']) && count($response['data']) >= 1) {
+            return "{$response['data']['lists'][0]['location']['lat']},{$response['data']['lists'][0]['location']['lat']}";
+        }
+        throw new \Exception("{$city}-{$keyWord} 找不到需要的地点");
     }
 
     public function addTask(Request $request)
