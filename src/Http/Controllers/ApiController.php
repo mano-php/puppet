@@ -123,11 +123,11 @@ class ApiController extends Controller
             ];
         }
         $content = json_decode($taskInfo->getAttribute('content'), true);
-        if ($status === 'status') {
+        if ($status === 'success') {
             try{
-                $map_response = json_decode(file_get_contents("https://apis.map.qq.com/ws/direction/v1/driving/?from={$this->keywordToLocation($result['start_address'],$content['city']['city'])}&to={$this->keywordToLocation($result['end_address'],$content['city']['city'])}&output=json&key={$this->map_key}"));
+                $map_response = json_decode(file_get_contents("https://apis.map.qq.com/ws/direction/v1/driving/?from={$this->keywordToLocation($result['start_address'],$content['city']['city'])}&to={$this->keywordToLocation($result['end_address'],$content['city']['city'])}&output=json&key={$this->map_key}"),true);
                 if (!(isset($map_response['result']['routes']) && is_array($map_response['result']['routes']) && count($map_response['result']['routes']) >= 1)) {
-                    throw new \Exception('导航距离获取失败');
+                    throw new \Exception("导航距离获取失败form={$this->keywordToLocation($result['start_address'],$content['city']['city'])}&to={$this->keywordToLocation($result['end_address'],$content['city']['city'])}");
                 }
                 $result['map_distance'] = sprintf('%.2f', $map_response['result']['routes'][0]['distance'] / 1000);
             }catch (\Throwable $throwable){
@@ -147,7 +147,7 @@ class ApiController extends Controller
     {
         $response = json_decode(file_get_contents("https://apis.map.qq.com/ws/place/v1/suggestion?key={$this->map_key}&region_fix=1&keyword={$keyWord}&region={$city}"), true);
         if (isset($response['data']) && is_array($response['data']) && count($response['data']) >= 1) {
-            return "{$response['data']['lists'][0]['location']['lat']},{$response['data']['lists'][0]['location']['lat']}";
+            return "{$response['data'][0]['location']['lat']},{$response['data'][0]['location']['lng']}";
         }
         throw new \Exception("{$city}-{$keyWord} 找不到需要的地点");
     }
