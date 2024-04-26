@@ -268,13 +268,22 @@ class ApiController extends Controller
         if ($puppetEquipment->getAttribute('reboot') == 1) {
             $puppetEquipment->setAttribute('reboot', 0);
             $puppetEquipment->save();
+            return [
+                'status' => 'success',
+                'msg' => '查询成功',
+                'data' => [
+                    'reboot' => 1
+                ]
+            ];
+        }else{
+            return [
+                'status' => 'success',
+                'msg' => '查询成功',
+                'data' => [
+                    'reboot' => 0
+                ]
+            ];
         }
-        return [
-            'status' => 'success',
-            'msg' => '查询成功',
-            'data' => [
-                'reboot' => $puppetEquipment->getAttribute('reboot')
-            ]
-        ];
+
     }
 }
