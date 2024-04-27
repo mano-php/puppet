@@ -40,10 +40,13 @@ class ApiController extends Controller
 //                'data' => []
 //            ];
         }
+        if(PuppetTask::query()->where(['status'=>3,'equipment_id'=>$puppetEquipment->getAttribute('id')])->count()>=50){
+            return ['status' => 'success', 'msg' => '已达到上限50条'];
+        }
         // 循环设备 （模拟下线） 超过两分钟
         foreach (PuppetEquipment::query()->where(['status' => 1])->get() as $equipment) {
             // 两分钟不消费 则视为掉线
-            if (strtotime($equipment->last_time) < (time() - 120)) {
+            if (strtotime($equipment->last_time) < (time() - 10)) {
                 PuppetEquipment::query()->where(['id' => $equipment->id])->update(['status' => 2]);
             }
         }
