@@ -3,7 +3,7 @@
     "alias": "傀儡机模块",
     "description": "安卓傀儡机",
     "type": "library",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "keywords": ["extension"],
     "homepage": "https://github.com/mano-php/puppet",
     "license": "MIT",
