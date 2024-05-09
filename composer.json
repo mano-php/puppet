@@ -1,5 +1,5 @@
 {
-    "name": "uupt-open/puppet",
+    "name": "mano-php/puppet",
     "alias": "傀儡机模块",
     "description": "安卓傀儡机",
     "type": "library",
