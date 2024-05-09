@@ -4,13 +4,13 @@
     "description": "安卓傀儡机",
     "type": "library",
     "version": "1.0.0",
-    "keywords": ["owl-admin", "extension"],
+    "keywords": [ "extension"],
     "homepage": "https://github.com/uupt/puppet",
     "license": "MIT",
     "authors": [
         {
-            "name": "UU跑腿",
-            "email": "admin@uupt.com"
+            "name": "Mano",
+            "email": "Mano@qq.com"
         }
     ],
     "require": {
@@ -19,14 +19,14 @@
     },
     "autoload": {
         "psr-4": {
-            "Uupt\\Puppet\\": "src/"
+            "ManoCode\\Puppet\\": "src/"
         }
     },
     "extra": {
-        "owl-admin": "Uupt\\Puppet\\PuppetServiceProvider",
+        "owl-admin": "ManoCode\\Puppet\\PuppetServiceProvider",
         "laravel": {
             "providers": [
-                "Uupt\\Puppet\\PuppetServiceProvider"
+                "ManoCode\\Puppet\\PuppetServiceProvider"
             ]
         }
     }
