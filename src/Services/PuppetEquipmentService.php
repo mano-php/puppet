@@ -1,9 +1,9 @@
 <?php
 
-namespace Uupt\Puppet\Services;
+namespace ManoCode\Puppet\Services;
 
 use Illuminate\Support\Str;
-use Uupt\Puppet\Models\PuppetEquipment;
+use ManoCode\Puppet\Models\PuppetEquipment;
 use Slowlyo\OwlAdmin\Services\AdminService;
 
 /**

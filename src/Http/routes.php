@@ -1,6 +1,6 @@
 <?php
 
-use Uupt\Puppet\Http\Controllers;
+use ManoCode\Puppet\Http\Controllers;
 use Illuminate\Support\Facades\Route;
 
 Route::get('puppet', [Controllers\PuppetController::class, 'index']);
@@ -19,8 +19,8 @@ Route::get('/puppet/get-huolala-account',[Controllers\PuppetHuolalaAccountContro
 Route::post('/puppet/equipment/reboot/{ids}',[Controllers\PuppetEquipmentController::class,'reboot']);
 
 // 设备管理
-Route::resource('puppet_equipment', \Uupt\Puppet\Http\Controllers\PuppetEquipmentController::class);
+Route::resource('puppet_equipment', \ManoCode\Puppet\Http\Controllers\PuppetEquipmentController::class);
 // 任务管理
-Route::resource('puppet_task', \Uupt\Puppet\Http\Controllers\PuppetTaskController::class);
+Route::resource('puppet_task', \ManoCode\Puppet\Http\Controllers\PuppetTaskController::class);
 // 货拉拉账号
-Route::resource('puppet_huolala_account', \Uupt\Puppet\Http\Controllers\PuppetHuolalaAccountController::class);
+Route::resource('puppet_huolala_account', \ManoCode\Puppet\Http\Controllers\PuppetHuolalaAccountController::class);

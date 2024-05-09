@@ -1,7 +1,7 @@
 <?php
 
 
-use Uupt\Puppet\Http\Controllers;
+use ManoCode\Puppet\Http\Controllers;
 use Illuminate\Support\Facades\Route;
 
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Uupt\Puppet\Models;
+namespace ManoCode\Puppet\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Slowlyo\OwlAdmin\Models\BaseModel as Model;

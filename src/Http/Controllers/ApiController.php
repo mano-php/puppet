@@ -1,14 +1,14 @@
 <?php
 
-namespace Uupt\Puppet\Http\Controllers;
+namespace ManoCode\Puppet\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Uupt\Puppet\Models\PuppetEquipment;
-use Uupt\Puppet\Models\PuppetHuolalaAccount;
-use Uupt\Puppet\Models\PuppetTask;
+use ManoCode\Puppet\Models\PuppetEquipment;
+use ManoCode\Puppet\Models\PuppetHuolalaAccount;
+use ManoCode\Puppet\Models\PuppetTask;
 
 /**
  *

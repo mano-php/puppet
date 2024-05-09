@@ -1,8 +1,8 @@
 <?php
 
-namespace Uupt\Puppet\Services;
+namespace ManoCode\Puppet\Services;
 
-use Uupt\Puppet\Models\PuppetHuolalaAccount;
+use ManoCode\Puppet\Models\PuppetHuolalaAccount;
 use Slowlyo\OwlAdmin\Services\AdminService;
 
 /**

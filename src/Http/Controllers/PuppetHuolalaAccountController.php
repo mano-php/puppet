@@ -1,15 +1,15 @@
 <?php
 
-namespace Uupt\Puppet\Http\Controllers;
+namespace ManoCode\Puppet\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Slowlyo\OwlAdmin\Renderers\Page;
 use Slowlyo\OwlAdmin\Renderers\Form;
 use Slowlyo\OwlAdmin\Controllers\AdminController;
-use Uupt\Puppet\Models\PuppetEquipment;
-use Uupt\Puppet\Models\PuppetHuolalaAccount;
-use Uupt\Puppet\Services\PuppetHuolalaAccountService;
+use ManoCode\Puppet\Models\PuppetEquipment;
+use ManoCode\Puppet\Models\PuppetHuolalaAccount;
+use ManoCode\Puppet\Services\PuppetHuolalaAccountService;
 
 /**
  * 货拉拉账号

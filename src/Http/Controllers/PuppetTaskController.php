@@ -1,11 +1,11 @@
 <?php
 
-namespace Uupt\Puppet\Http\Controllers;
+namespace ManoCode\Puppet\Http\Controllers;
 
 use Slowlyo\OwlAdmin\Renderers\Page;
 use Slowlyo\OwlAdmin\Renderers\Form;
 use Slowlyo\OwlAdmin\Controllers\AdminController;
-use Uupt\Puppet\Services\PuppetTaskService;
+use ManoCode\Puppet\Services\PuppetTaskService;
 
 /**
  * 任务管理

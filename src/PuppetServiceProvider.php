@@ -1,6 +1,6 @@
 <?php
 
-namespace Uupt\Puppet;
+namespace ManoCode\Puppet;
 
 use Illuminate\Support\Facades\Cache;
 use Slowlyo\OwlAdmin\Renderers\TextControl;

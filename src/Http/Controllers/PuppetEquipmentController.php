@@ -1,17 +1,17 @@
 <?php
 
-namespace Uupt\Puppet\Http\Controllers;
+namespace ManoCode\Puppet\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Slowlyo\OwlAdmin\Renderers\Page;
 use Slowlyo\OwlAdmin\Renderers\Form;
 use Slowlyo\OwlAdmin\Controllers\AdminController;
-use Uupt\Approval\Models\ApprovalBind;
-use Uupt\Erp\Models\Good;
-use Uupt\Erp\Models\GoodsUnit;
-use Uupt\Puppet\Models\PuppetEquipment;
-use Uupt\Puppet\Services\PuppetEquipmentService;
+use ManoCode\Approval\Models\ApprovalBind;
+use ManoCode\Erp\Models\Good;
+use ManoCode\Erp\Models\GoodsUnit;
+use ManoCode\Puppet\Models\PuppetEquipment;
+use ManoCode\Puppet\Services\PuppetEquipmentService;
 
 /**
  * 设备管理

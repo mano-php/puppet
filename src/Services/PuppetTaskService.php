@@ -1,12 +1,12 @@
 <?php
 
-namespace Uupt\Puppet\Services;
+namespace ManoCode\Puppet\Services;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use Uupt\Puppet\Models\PuppetEquipment;
-use Uupt\Puppet\Models\PuppetTask;
+use ManoCode\Puppet\Models\PuppetEquipment;
+use ManoCode\Puppet\Models\PuppetTask;
 use Slowlyo\OwlAdmin\Services\AdminService;
 
 /**
